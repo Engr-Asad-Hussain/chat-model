@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redis
+    container_name: redis
+    expose:
+      - '6379'
+    volumes:
+      - ./volume:/data
+    networks:
+      - private_network
+
+  backend_app:
+    image: backend_app:uat
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    expose:
+      - '8000'
+    ports:
+      - '8000:8000'
+    networks:
+      - private_network
+
+networks:
+  private_network:
+    name: 'backend_app_private_network'
